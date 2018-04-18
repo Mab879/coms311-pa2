@@ -15,11 +15,20 @@
 import java.util.ArrayList;
 
 public class NetworkInfluence {
-    // NOTE: graphData is an absolute file path that contains graph data, NOT the raw graph data itself
-    public NetworkInfluence(String graphData) {
+    /**
+     * Loads a graph from a file.
+     * @param fileName an absolute path to the file containing the graph data. First line is a count of nodes. Each
+     *                 following line is an edge denoted by two nodes separated by a single space.
+     */
+    public NetworkInfluence(String fileName) {
         // implementation
     }
 
+    /**
+     * Calculates the out degree of a node.
+     * @param v the node to calculated the out degree on
+     * @return the out degree of the node
+     */
     public int outDegree(String v) {
         // implementation
 
@@ -27,6 +36,13 @@ public class NetworkInfluence {
         return -1;
     }
 
+    /**
+     * Does a BFS search to find the shortest path between the nodes.
+     * @param u the starting vertex
+     * @param v the destination vertex
+     * @return a list of nodes that starts with u, ends with v, and is a shortest path between them. Empty list if there
+     * is no path.
+     */
     public ArrayList<String> shortestPath(String u, String v) {
         // implementation
 
@@ -34,6 +50,13 @@ public class NetworkInfluence {
         return null;
     }
 
+    /**
+     * Calculates the distance between two nodes.
+     * @param u the starting vertex
+     * @param v the destination vertex
+     * @return the minimum number of edges needed to traverse between the two nodes. If there is no path, -1 is
+     * returned.
+     */
     public int distance(String u, String v) {
         // implementation:
 
@@ -41,6 +64,12 @@ public class NetworkInfluence {
         return -1;
     }
 
+    /**
+     * Calculates the minimum distance between an element in s and v.
+     * @param s a subset of vertices that may be a starting vertex
+     * @param v the destination vertex
+     * @return the minimum distance between any node in s to node v
+     */
     public int distance(ArrayList<String> s, String v) {
         // implementation
 
@@ -48,6 +77,11 @@ public class NetworkInfluence {
         return -1;
     }
 
+    /**
+     * The influence of the node calculated by Sum[1/2^i * |{y|dist(x,y)==i}|, {i, 0, n}]
+     * @param u the node to calculate the influence of
+     * @return the decimal value of the influence of the node on the graph
+     */
     public float influence(String u) {
         // implementation
 
@@ -55,6 +89,11 @@ public class NetworkInfluence {
         return -1f;
     }
 
+    /**
+     * The influence of the subset on the set, calculated by Sum[1/2^i * |{y|dist(S,y)==i}|, {i, 0, n}]
+     * @param s the subset of nodes to find the influence of
+     * @return the decimal value of the influence of the subset of nodes on the graph
+     */
     public float influence(ArrayList<String> s) {
         // implementation
 
@@ -62,6 +101,11 @@ public class NetworkInfluence {
         return -1f;
     }
 
+    /**
+     * Calculates a set of the most influential nodes using the Degree Greedy algorithm.
+     * @param k the maximum number of most influential nodes to return
+     * @return a subset of the most k influential nodes
+     */
     public ArrayList<String> mostInfluentialDegree(int k) {
         // implementation
 
@@ -69,6 +113,11 @@ public class NetworkInfluence {
         return null;
     }
 
+    /**
+     * Calculates a set of the most influential nodes using the Modular Greedy algorithm.
+     * @param k the maximum number of most influential nodes to return
+     * @return a subset of the most k influential nodes
+     */
     public ArrayList<String> mostInfluentialModular(int k) {
         // implementation
 
@@ -76,6 +125,11 @@ public class NetworkInfluence {
         return null;
     }
 
+    /**
+     * Calculates a set of the most influential nodes using the SubModular Greedy algorithm.
+     * @param k the maximum number of most influential nodes to return
+     * @return a subset of the most k influential nodes
+     */
     public ArrayList<String> mostInfluentialSubModular(int k) {
         // implementation
 
