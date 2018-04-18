@@ -8,22 +8,20 @@
 //  (i.e., you may only include libraries of the form java.*)
 
 /**
- * @author Hugh Potter
+ * @author Matthew Burket
+ * @author Joel May
  */
 
 import java.util.ArrayList;
 
-public class WikiCrawler
-{
+public class WikiCrawler {
     static final String BASE_URL = "https://en.wikipedia.org/";
 
-    public WikiCrawler(String seedUrl, int max, ArrayList<String> topics, String fileName)
-    {
+    public WikiCrawler(String seedUrl, int max, ArrayList<String> topics, String fileName) {
         // implementation
     }
 
-    public void crawl()
-    {
+    public void crawl() {
         // implementation
     }
 }
