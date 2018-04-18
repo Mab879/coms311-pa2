@@ -8,85 +8,75 @@
 //  (i.e., you may only include libraries of the form java.*)
 
 /**
- * @author Hugh Potter
+ * @author Matthew Burket
+ * @author Joel May
  */
 
 import java.util.ArrayList;
 
-public class NetworkInfluence
-{
+public class NetworkInfluence {
     // NOTE: graphData is an absolute file path that contains graph data, NOT the raw graph data itself
-    public NetworkInfluence(String graphData)
-    {
+    public NetworkInfluence(String graphData) {
         // implementation
     }
 
-    public int outDegree(String v)
-    {
+    public int outDegree(String v) {
         // implementation
 
         // replace this:
         return -1;
     }
 
-    public ArrayList<String> shortestPath(String u, String v)
-    {
+    public ArrayList<String> shortestPath(String u, String v) {
         // implementation
 
         // replace this:
         return null;
     }
 
-    public int distance(String u, String v)
-    {
+    public int distance(String u, String v) {
         // implementation:
 
         // replace this:
         return -1;
     }
 
-    public int distance(ArrayList<String> s, String v)
-    {
+    public int distance(ArrayList<String> s, String v) {
         // implementation
 
         // replace this:
         return -1;
     }
 
-    public float influence(String u)
-    {
+    public float influence(String u) {
         // implementation
 
         // replace this:
         return -1f;
     }
 
-    public float influence(ArrayList<String> s)
-    {
+    public float influence(ArrayList<String> s) {
         // implementation
 
         // replace this:
         return -1f;
     }
 
-    public ArrayList<String> mostInfluentialDegree(int k)
-    {
+    public ArrayList<String> mostInfluentialDegree(int k) {
         // implementation
 
         // replace this:
         return null;
     }
 
-    public ArrayList<String> mostInfluentialModular(int k)
-    {
+    public ArrayList<String> mostInfluentialModular(int k) {
         // implementation
 
         // replace this:
         return null;
     }
 
-    public ArrayList<String> mostInfluentialSubModular(int k)
-    {
+    public ArrayList<String> mostInfluentialSubModular(int k) {
         // implementation
 
         // replace this:
