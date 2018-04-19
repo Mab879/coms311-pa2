@@ -99,13 +99,20 @@ public class NetworkInfluence {
      * Calculates the minimum distance between an element in s and v.
      * @param s a subset of vertices that may be a starting vertex
      * @param v the destination vertex
-     * @return the minimum distance between any node in s to node v
+     * @return the minimum distance between any node in s to node v. -1 if there is no path between any node in s and v.
      */
     public int distance(ArrayList<String> s, String v) {
-        // implementation
-
-        // replace this:
-        return -1;
+        int minDistance = Integer.MAX_VALUE;
+        for (String startNode : s) {
+            int thisDistance = distance(startNode, v);
+            if (thisDistance != -1 && thisDistance < minDistance) {
+                minDistance = thisDistance;
+            }
+        }
+        if (minDistance == Integer.MAX_VALUE) {
+            return -1;
+        }
+        return minDistance;
     }
 
     /**
