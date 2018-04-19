@@ -91,10 +91,8 @@ public class NetworkInfluence {
      * returned.
      */
     public int distance(String u, String v) {
-        // implementation:
-
-        // replace this:
-        return -1;
+        int dist = shortestPath(u, v).size();
+        return dist - 1;
     }
 
     /**
