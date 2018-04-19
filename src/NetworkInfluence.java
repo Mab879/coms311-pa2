@@ -12,16 +12,36 @@
  * @author Joel May
  */
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class NetworkInfluence {
+    private int vertexCount;
+
     /**
      * Loads a graph from a file.
      * @param fileName an absolute path to the file containing the graph data. First line is a count of nodes. Each
-     *                 following line is an edge denoted by two nodes separated by a single space.
+     *                 following line is an edge denoted by two nodes separated by one or more whitespace characters.
      */
     public NetworkInfluence(String fileName) {
         // implementation
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))) {
+            vertexCount = Integer.parseInt(bufferedReader.readLine());
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.length() == 0) {
+                    continue;
+                }
+                String[] edge = line.split("\\s+");
+                if (edge.length != 2) {
+                    throw new RuntimeException("Input file is malformed. Must have 2 nodes separated by spaces." +
+                            "Line: " + line);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Problem reading the file to load the graph.");
+            e.printStackTrace();
+        }
     }
 
     /**
