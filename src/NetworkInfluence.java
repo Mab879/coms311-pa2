@@ -15,10 +15,11 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class NetworkInfluence {
     private int vertexCount;
-    private HashMap<String, String> edges = new HashMap<>();
+    private HashMap<String, List<String>> edges = new HashMap<>();
 
     /**
      * Loads a graph from a file.
@@ -41,7 +42,14 @@ public class NetworkInfluence {
                             "Line: " + line);
                 }
                 // Store edge
-                edges.put(edge[0], edge[1]);
+                List<String> outNodes;
+                if (edges.containsKey(edge[0])) {
+                    outNodes = edges.get(edge[0]);
+                } else {
+                    outNodes = new ArrayList<>();
+                }
+                outNodes.add(edge[1]);
+                edges.put(edge[0], outNodes);
             }
         } catch (IOException e) {
             System.err.println("Problem reading the file to load the graph.");
@@ -55,10 +63,10 @@ public class NetworkInfluence {
      * @return the out degree of the node
      */
     public int outDegree(String v) {
-        // implementation
-
-        // replace this:
-        return -1;
+        if (edges.containsKey(v)) {
+            return edges.get(v).size();
+        }
+        return 0;
     }
 
     /**
