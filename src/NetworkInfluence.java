@@ -14,9 +14,11 @@
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NetworkInfluence {
     private int vertexCount;
+    private HashMap<String, String> edges = new HashMap<>();
 
     /**
      * Loads a graph from a file.
@@ -29,6 +31,7 @@ public class NetworkInfluence {
             vertexCount = Integer.parseInt(bufferedReader.readLine());
             String line;
             while ((line = bufferedReader.readLine()) != null) {
+                // Validations on line format
                 if (line.length() == 0) {
                     continue;
                 }
@@ -37,6 +40,8 @@ public class NetworkInfluence {
                     throw new RuntimeException("Input file is malformed. Must have 2 nodes separated by spaces." +
                             "Line: " + line);
                 }
+                // Store edge
+                edges.put(edge[0], edge[1]);
             }
         } catch (IOException e) {
             System.err.println("Problem reading the file to load the graph.");
