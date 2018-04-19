@@ -13,9 +13,7 @@
  */
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class NetworkInfluence {
     private int vertexCount;
@@ -77,6 +75,24 @@ public class NetworkInfluence {
      * is no path.
      */
     public ArrayList<String> shortestPath(String u, String v) {
+        final ArrayList<String> path = new ArrayList<>();
+        final ArrayDeque<String> toVisit = new ArrayDeque<>();
+        final HashMap<String, String> parent = new HashMap<>(); // This idea is from Wikipedia: Breadth-first search
+
+        // TODO
+        toVisit.add(u);
+        String currentNode = toVisit.remove();
+        if (edges.containsKey(currentNode)) {
+            edges.get(currentNode).forEach(dst -> {
+                if (!parent.containsKey(dst)) {
+                    toVisit.add(dst);
+                    parent.put(dst, currentNode);
+                }
+            });
+        }
+        if (currentNode.equals(v)) {
+            return path;
+        }
         // implementation
 
         // replace this:
