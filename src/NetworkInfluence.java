@@ -239,7 +239,7 @@ public class NetworkInfluence {
      */
     public ArrayList<String> mostInfluentialDegree(int k) {
         // Stores the top k influential nodes by the out degree
-        final TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeOutDegreeComparator());
+        final TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
         // ArrayList to put the final output in
         ArrayList<String> ret = new ArrayList<>(k);
 
@@ -265,10 +265,25 @@ public class NetworkInfluence {
      * @return a subset of the most k influential nodes
      */
     public ArrayList<String> mostInfluentialModular(int k) {
-        // implementation
+        // Stores the top k influential nodes by the influence equation
+        final TreeSet<Map.Entry<String, Float>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
+        // ArrayList to put the final output in
+        ArrayList<String> ret = new ArrayList<>();
 
-        // replace this:
-        return null;
+        // Iterate over every known node
+        edges.forEach((node, outNodes) -> {
+            // Put the node and its influence in the top list
+            topK.add(new AbstractMap.SimpleEntry<>(node, influence(node)));
+
+            // Trim the top list down to k elements
+            while (topK.size() > k) {
+                topK.remove(topK.first());
+            }
+        });
+
+        // Remove the influence
+        topK.forEach(nodeAndInfluence -> ret.add(nodeAndInfluence.getKey()));
+        return ret;
     }
 
     /**
@@ -284,11 +299,11 @@ public class NetworkInfluence {
     }
 
     /**
-     * Sorts nodes by the out degree (and falls back to alphabetical on equal out degrees)
+     * Sorts nodes by the influence (and falls back to alphabetical on equal influences)
      */
-    private static class NodeOutDegreeComparator implements Comparator<Map.Entry<String, Integer>> {
+    private static class NodeInfluenceComparator<K extends Comparable<K>> implements Comparator<Map.Entry<String, K>> {
         @Override
-        public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+        public int compare(Map.Entry<String, K> o1, Map.Entry<String, K> o2) {
             if (!o1.getValue().equals(o2.getValue())) {
                 return o1.getValue().compareTo(o2.getValue());
             }
