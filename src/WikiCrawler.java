@@ -12,10 +12,7 @@
  * @author Joel May
  */
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -26,7 +23,7 @@ public class WikiCrawler {
     /**
      * Base URL of search
      */
-    static final String BASE_URL = "https://en.wikipedia.org/";
+    static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
     /**
      * Url of page to start at
      */
@@ -64,9 +61,9 @@ public class WikiCrawler {
      */
     private ArrayList<Map.Entry<String, String>> graph;
     /**
-     * List of pages that have all the
+     * Hash map of Dest > list of pages that link to it
      */
-    private ArrayList<String> onTopic;
+    private HashMap<String, ArrayList<String>> links;
 
     /**
      * Create a Wiki Crawler
@@ -82,13 +79,23 @@ public class WikiCrawler {
         this.fileName = fileName;
         requestCount = 0;
         graph = new ArrayList<>();
+        q = new LinkedList<>();
+        visited = new ArrayList<>();
         this.topics = topics;
+        links = new HashMap<>();
     }
 
     /**
      * Crawls the BASE_URL based on seedUrl and BASE_URL
      */
     public void crawl() throws IOException, InterruptedException {
+        // No topics don't scan
+        if (topics.size() <= 0) {
+            File f = new File(fileName);
+            f.createNewFile();
+            return;
+        }
+
         // Add the seed url to the
         q.add(seedUrl);
         while (!q.isEmpty()) {
@@ -107,26 +114,40 @@ public class WikiCrawler {
                     break;
                 }
             }
-            // The Real abort if the page doesn't contain things
+            // The real abort if the page doesn't contain things
             if (!keepGoing) {
                 continue;
             }
+            // Add the pages that linked to me to the graph
+            ArrayList<String> pagesLinkedToMe = links.get(currentPath);
+            if (pagesLinkedToMe != null) {
+                for (String page : pagesLinkedToMe) {
+                    graph.add(new AbstractMap.SimpleEntry<>(page, currentPath));
+                }
+            }
             // Contains all the topics, get all links on the page
-            ArrayList<String> links = getLinks(html);
+            ArrayList<String> linksHTML = getLinks(html);
             ArrayList<String> added = new ArrayList<>();
-            for (String link : links) {
+            for (String link : linksHTML) {
                 if (added.contains(link) || visited.contains(link)) {
                     continue;
                 }
                 q.add(link);
+                appendToKey(currentPath, link);
                 added.add(link);
-                graph.add(new AbstractMap.SimpleEntry<>(currentPath, link));
             }
             pagesCount++;
             if (pagesCount >= max) {
                 return;
             }
         }
+        FileWriter fw = new FileWriter(fileName);
+        for (Map.Entry entry : graph) {
+            fw.write(entry.getKey() + " " + entry.getValue() + "\n");
+        }
+        fw.flush();
+        fw.close();
+
     }
 
     /**
@@ -139,18 +160,22 @@ public class WikiCrawler {
         if (path == null || path.isEmpty() || path.trim().isEmpty()) {
             throw new IllegalArgumentException("Must define a path");
         }
+        // Make a URL
         URL theURL = new URL(BASE_URL + path);
+        // Get the stream
         InputStream inputStream = theURL.openStream();
+        // Make a reader
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
+        // Build page string
         StringBuilder stringBuilder = new StringBuilder();
-
 
         String line;
 
         while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
         }
+        // Add one to the page count
         requestCount++;
         if (requestCount % 25 == 0) {
             Thread.sleep(3000);
@@ -167,8 +192,8 @@ public class WikiCrawler {
     private ArrayList<String> getLinks(String html) {
         int pTag = html.indexOf("<p>");
         String parseString = html.substring(pTag+3);
-        String p = "href=\\\"/wiki/(.*?)\\\"";
-        Pattern htmlPattern = Pattern.compile(p);
+        String pTagPattern = "href=\\\"/wiki/(.*?)\\\"";
+        Pattern htmlPattern = Pattern.compile(pTagPattern);
         Matcher m = htmlPattern.matcher(parseString);
         ArrayList<String> urls = new ArrayList<>();
         String currentUrl;
@@ -179,5 +204,16 @@ public class WikiCrawler {
             }
         }
         return urls;
+    }
+
+    /**
+     * Add link to dest list
+     *
+     * @param source source page
+     * @param dest dest page
+     */
+    private void appendToKey(String source, String dest) {
+        links.computeIfAbsent(dest, k -> new ArrayList<>());
+        links.get(dest).add(source);
     }
 }
