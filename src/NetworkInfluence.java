@@ -244,6 +244,7 @@ public class NetworkInfluence {
         ArrayList<String> ret = new ArrayList<>(k);
 
         // Iterate over every known node
+        // TODO pre-compute a hashmap of all nodes
         edges.forEach((node, outNodes) -> {
             // Put the node and its out degree in the top list
             topK.add(new AbstractMap.SimpleEntry<>(node, outDegree(node)));
@@ -271,6 +272,7 @@ public class NetworkInfluence {
         ArrayList<String> ret = new ArrayList<>();
 
         // Iterate over every known node
+        // TODO pre-compute a hashmap of all nodes
         edges.forEach((node, outNodes) -> {
             // Put the node and its influence in the top list
             topK.add(new AbstractMap.SimpleEntry<>(node, influence(node)));
@@ -292,10 +294,43 @@ public class NetworkInfluence {
      * @return a subset of the most k influential nodes
      */
     public ArrayList<String> mostInfluentialSubModular(int k) {
-        // implementation
+        // Store an array list for easy swapping out of elements
+        ArrayList<String> S = new ArrayList<>(k);
+        // Store the same data in a hash set for fast lookup
+        HashSet<String> SHashSet = new HashSet<>();
 
-        // replace this:
-        return null;
+        for (int i = 0; i < k; i++) {
+            // Used to keep track of the most influential addition to the set
+            String topNewNode = null;
+            float topNewNodeInf = Float.NEGATIVE_INFINITY;
+            // Keep track of the last element of the set, where v will be put
+            int lastIndex = S.size();
+
+            // Add a placeholder for v to set S
+            S.add(null);
+
+            // TODO pre-compute a hashmap of all nodes
+            for (Map.Entry<String, List<String>> outEdges : edges.entrySet()) {
+                // Skip v if it exists in S already
+                if (!SHashSet.contains(outEdges.getKey())) {
+                    // Set the node to calculate the set influence with
+                    S.set(lastIndex, outEdges.getKey());
+                    // Calculate the influence of S \union v
+                    float testInfluence = influence(S);
+
+                    // Keep track of the set that creates the most influence
+                    if (testInfluence > topNewNodeInf) {
+                        topNewNode = outEdges.getKey();
+                        topNewNodeInf = testInfluence;
+                    }
+                }
+            }
+
+            // Add v to set S
+            S.set(lastIndex, topNewNode);
+            SHashSet.add(topNewNode);
+        }
+        return S;
     }
 
     /**
