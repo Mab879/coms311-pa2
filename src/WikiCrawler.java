@@ -55,7 +55,7 @@ public class WikiCrawler {
     /**
      * List of Urls Crawled
      */
-    private ArrayList<String> visited;
+    private HashSet<String> visited;
     /**
      *  A list of Key Value pairs of entries
      */
@@ -79,8 +79,8 @@ public class WikiCrawler {
         this.fileName = fileName;
         requestCount = 0;
         graph = new ArrayList<>();
-        q = new LinkedList<>();
-        visited = new ArrayList<>();
+        q = new ArrayDeque<>();
+        visited = new HashSet<>();
         this.topics = topics;
         links = new HashMap<>();
     }
@@ -91,22 +91,22 @@ public class WikiCrawler {
     public void crawl() throws IOException, InterruptedException {
         // Add the seed url to the
         q.add(seedUrl);
-        while (!q.isEmpty()) {
+        visited.add(seedUrl);
+        while (!q.isEmpty() && pagesCount < max) {
             // Remove from the top of the queue
             String currentPath = q.remove();
-            // Mark Current Path as visited
-            if (visited.contains(currentPath)) {
-                continue;
-            }
-            visited.add(currentPath);
             // Get page HTML
             String html = getPageText(currentPath);
+            // Get the actual page content
+            int pTag = html.indexOf("<p>");
+            String parseString = html.substring(pTag + 3);
             // Checking if page contains all the topics
             if (topics != null && topics.size() > 0) {
                 boolean keepGoing = true;
                 for (String s : topics) {
                     // Doesn't contain one of the topics exit
-                    if (!html.toLowerCase().contains(s.toLowerCase())) {
+                    // TODO run .toLowerCase outside the loop once
+                    if (!parseString.toLowerCase().contains(s.toLowerCase())) {
                         keepGoing = false;
                         break;
                     }
@@ -125,24 +125,17 @@ public class WikiCrawler {
             }
             // Contains all the topics, get all links on the page
             ArrayList<String> linksHTML = getLinks(html);
-            ArrayList<String> added = new ArrayList<>();
             for (String link : linksHTML) {
-                if (added.contains(link) || visited.contains(link)) {
-                    continue;
+                // If the URL is not visited, add it to the queue
+                if (!visited.contains(link)) {
+                    q.add(link);
+                    visited.add(link);
+                    appendToKey(currentPath, link);
                 }
-                added.add(link);
-                q.add(link);
-                appendToKey(currentPath, link);
             }
             pagesCount++;
-            if (pagesCount > max) {
-                writeGraph();
-                return;
-            }
         }
         writeGraph();
-        return;
-
     }
 
     private void writeGraph() throws IOException {
