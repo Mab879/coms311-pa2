@@ -12,7 +12,9 @@
 
 \section{Data Structures}
 \subsection{Q}
+We used an \texttt{ArrayDeque<String>} for $Q$. We needed a simple queue that lets us enqueue and dequeue items. In Java, the \texttt{ArrayDeque} is one of the most basic queues. It was a trivial choice to make the queue hold \texttt{String}s for the nodes. There was no obvious contender on that choice.
 \subsection{Visited}
+We used a \texttt{HashSet<String>} for $visited$. The operations we need are inserting new URLs and checking for the existence of URLs. The \texttt{HashSet} gives us $O(1)$ time complexity for both of those operations (assuming hash functions of $O(1)$. The \texttt{HashSet} implements what we need and does the operations quickly.
 \section{Top 10 most influential nodes}
 \subsection{computed by mostInfluentialDegree}
 \subsection{computed bymostInfluentialModular}
