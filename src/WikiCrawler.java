@@ -23,7 +23,7 @@ public class WikiCrawler {
     /**
      * Base URL of search
      */
-    static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
+    static final String BASE_URL = "https://en.wikipedia.org";
     /**
      * Url of page to start at
      */
@@ -89,34 +89,32 @@ public class WikiCrawler {
      * Crawls the BASE_URL based on seedUrl and BASE_URL
      */
     public void crawl() throws IOException, InterruptedException {
-        // No topics don't scan
-        if (topics.size() <= 0) {
-            File f = new File(fileName);
-            f.createNewFile();
-            return;
-        }
-
         // Add the seed url to the
         q.add(seedUrl);
         while (!q.isEmpty()) {
             // Remove from the top of the queue
             String currentPath = q.remove();
             // Mark Current Path as visited
+            if (visited.contains(currentPath)) {
+                continue;
+            }
             visited.add(currentPath);
             // Get page HTML
             String html = getPageText(currentPath);
             // Checking if page contains all the topics
-            boolean keepGoing = true;
-            for (String s : topics) {
-                // Doesn't contain one of the topics exit
-                if (!html.contains(s)) {
-                    keepGoing = false;
-                    break;
+            if (topics != null && topics.size() > 0) {
+                boolean keepGoing = true;
+                for (String s : topics) {
+                    // Doesn't contain one of the topics exit
+                    if (!html.toLowerCase().contains(s.toLowerCase())) {
+                        keepGoing = false;
+                        break;
+                    }
                 }
-            }
-            // The real abort if the page doesn't contain things
-            if (!keepGoing) {
-                continue;
+                // The real abort if the page doesn't contain things
+                if (!keepGoing) {
+                    continue;
+                }
             }
             // Add the pages that linked to me to the graph
             ArrayList<String> pagesLinkedToMe = links.get(currentPath);
@@ -132,22 +130,28 @@ public class WikiCrawler {
                 if (added.contains(link) || visited.contains(link)) {
                     continue;
                 }
+                added.add(link);
                 q.add(link);
                 appendToKey(currentPath, link);
-                added.add(link);
             }
             pagesCount++;
-            if (pagesCount >= max) {
+            if (pagesCount > max) {
+                writeGraph();
                 return;
             }
         }
+        writeGraph();
+        return;
+
+    }
+
+    private void writeGraph() throws IOException {
         FileWriter fw = new FileWriter(fileName);
         for (Map.Entry entry : graph) {
             fw.write(entry.getKey() + " " + entry.getValue() + "\n");
         }
         fw.flush();
         fw.close();
-
     }
 
     /**
@@ -180,6 +184,7 @@ public class WikiCrawler {
         if (requestCount % 25 == 0) {
             Thread.sleep(3000);
         }
+        Thread.sleep(100);
         return stringBuilder.toString();
     }
 
@@ -192,18 +197,26 @@ public class WikiCrawler {
     private ArrayList<String> getLinks(String html) {
         int pTag = html.indexOf("<p>");
         String parseString = html.substring(pTag+3);
-        String pTagPattern = "href=\\\"/wiki/(.*?)\\\"";
+        String pTagPattern = "<a[^>]* href=\"(.*?)\"";
         Pattern htmlPattern = Pattern.compile(pTagPattern);
         Matcher m = htmlPattern.matcher(parseString);
         ArrayList<String> urls = new ArrayList<>();
         String currentUrl;
         while (m.find()) {
-            currentUrl = m.group().replace("\"", "").replace("href=", "");
+            currentUrl = m.group().replace("\"", "")
+                                  .replace("href=", "").replace(" ", "")
+                                  .replace("<a", "");
             if (!currentUrl.contains(":") && !currentUrl.contains("#")) {
                 urls.add(currentUrl);
             }
         }
-        return urls;
+        ArrayList<String> result = new ArrayList<>();
+        for (String url : urls) {
+            if (url.startsWith("/wiki")) {
+                result.add(url);
+            }
+        }
+        return result;
     }
 
     /**

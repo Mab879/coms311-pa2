@@ -1,0 +1,40 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{Matthew Burket and Joel May}
+\title{Programming Assignment 2 Report}
+\begin{document}
+\maketitle
+\section{Data Structures}
+\subsection{Q}
+We used a linked list for queue. Using a linked list for queue which allows for $O(1)$ for adding and removing elements. We chose a LinkedList for Q due to the fact that adding and queue is constant time.
+\subsection{Visited}
+An ArrayList was used for visited. It allows for growing size of the visited.
+\section{Top 10 most influential nodes}
+\subsection{computed by mostInfluentialDegree}
+\subsection{computed bymostInfluentialModular}
+\subsection{computed by mostInfluentialSubModular}
+\section{Pseudo Code}
+\subsection{Constructor}
+\subsection{outDegree}
+\begin{verbatim}
+function outDegree(String v)
+    if (edges.containKey(v))
+			return edges.get(v).size();
+	return 0
+\end{verbatim}
+\subsection{shortestPath}
+\subsection{distance(String u, String v)}
+\subsection{distance(ArrayList<String> s, String v)}
+\subsection{influence(ArrayList<String> s)}
+\subsection{mostInfluentialDegree(int k)}
+\subsection{mostInfluentialModular(int k)}
+\subsection{mostInfluentialSubModular(int k)}
+\section{Run-time}
+\subsection{Constructor}
+\subsection{outDegree}
+
+\end{document}
