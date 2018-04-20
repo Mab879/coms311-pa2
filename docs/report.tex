@@ -6,8 +6,10 @@
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \author{Matthew Burket and Joel May}
 \title{Programming Assignment 2 Report}
+
 \begin{document}
 \maketitle
+
 \section{Data Structures}
 \subsection{Q}
 \subsection{Visited}
@@ -21,7 +23,7 @@
 \begin{verbatim}
 function outDegree(String v)
     if (edges.containKey(v))
-       return edges.get(v).size();
+        return edges.get(v).size();
 	return 0
 \end{verbatim}
 \subsection{\texttt{shortestPath}}
@@ -32,14 +34,14 @@ function shortestPath
    	toVisit.add(u)
    	parent.put(u, null)
    	do
-   		currentNode = toVisit.remove()
-   		if currentNode == v
-   			backNode = currentNode
-   			Stack path
-   			do 
-   				path.push(backNode)
-   				backNode = parent.get(backend)
-   			while !backNode == u
+   	    currentNode = toVisit.remove()
+   	    if currentNode == v
+   	        backNode = currentNode
+   	        Stack path
+   	        do 
+   	            path.push(backNode)
+   	            backNode = parent.get(backend)
+   	        while !backNode == u
    			
 \end{verbatim}
 \subsection{\texttt{distance(String u, String v)}}
@@ -50,7 +52,7 @@ function distance(String u, String v)
 \subsection{\texttt{distance(ArrayList<String> s, String v)}}
 \begin{verbatim}
 function distance(ArrayList<String> s, String v) 
-       minDistance = Int.MAX_VALUE
+        minDistance = Int.MAX_VALUE
     for node in s
         int thisDist = shortestPath(u,v)
         if thisDist != -1 && thisDist < minDistance
