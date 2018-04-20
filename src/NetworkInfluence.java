@@ -151,10 +151,14 @@ public class NetworkInfluence {
      * @return the decimal value of the influence of the node on the graph
      */
     public float influence(String u) {
-        // implementation
+        TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
+        float sum = 0;
 
-        // replace this:
-        return -1f;
+        for (Map.Entry<Integer, Integer> depthAndCount : tieredCounts.entrySet()) {
+            sum += 1 / Math.pow(2, depthAndCount.getKey()) * depthAndCount.getValue();
+        }
+
+        return sum;
     }
 
     /**
