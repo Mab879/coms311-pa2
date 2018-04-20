@@ -79,7 +79,7 @@ public class WikiCrawler {
         this.fileName = fileName;
         requestCount = 0;
         graph = new ArrayList<>();
-        q = new LinkedList<>();
+        q = new ArrayDeque<>();
         visited = new ArrayList<>();
         this.topics = topics;
         links = new HashMap<>();
@@ -101,12 +101,15 @@ public class WikiCrawler {
             visited.add(currentPath);
             // Get page HTML
             String html = getPageText(currentPath);
+            // Get the actual page content
+            int pTag = html.indexOf("<p>");
+            String parseString = html.substring(pTag+3);
             // Checking if page contains all the topics
             if (topics != null && topics.size() > 0) {
                 boolean keepGoing = true;
                 for (String s : topics) {
                     // Doesn't contain one of the topics exit
-                    if (!html.toLowerCase().contains(s.toLowerCase())) {
+                    if (!parseString.toLowerCase().contains(s.toLowerCase())) {
                         keepGoing = false;
                         break;
                     }
@@ -141,8 +144,6 @@ public class WikiCrawler {
             }
         }
         writeGraph();
-        return;
-
     }
 
     private void writeGraph() throws IOException {
