@@ -16,8 +16,15 @@ import java.io.*;
 import java.util.*;
 
 public class NetworkInfluence {
+    /**
+     * The count of vertices that exist in the graph. Since we are provided an edge list to populate nodes, this may be
+     * larger than nodes.
+     */
     private int vertexCount;
+    /** A map of all directed edges in the graph */
     private HashMap<String, List<String>> edges = new HashMap<>();
+    /** A set of all the nodes in the graph */
+    private HashSet<String> nodes = new HashSet<>();
 
     /**
      * Loads a graph from a file.
@@ -39,6 +46,7 @@ public class NetworkInfluence {
                     throw new RuntimeException("Input file is malformed. Must have 2 nodes separated by spaces." +
                             "Line: " + line);
                 }
+
                 // Store edge
                 List<String> outNodes;
                 if (edges.containsKey(edge[0])) {
@@ -48,6 +56,10 @@ public class NetworkInfluence {
                 }
                 outNodes.add(edge[1]);
                 edges.put(edge[0], outNodes);
+
+                // Store vertices
+                nodes.add(edge[0]);
+                nodes.add(edge[1]);
             }
         } catch (IOException e) {
             System.err.println("Problem reading the file to load the graph.");
@@ -244,8 +256,7 @@ public class NetworkInfluence {
         ArrayList<String> ret = new ArrayList<>(k);
 
         // Iterate over every known node
-        // TODO pre-compute a hashmap of all nodes
-        edges.forEach((node, outNodes) -> {
+        nodes.forEach(node -> {
             // Put the node and its out degree in the top list
             topK.add(new AbstractMap.SimpleEntry<>(node, outDegree(node)));
 
@@ -272,8 +283,7 @@ public class NetworkInfluence {
         ArrayList<String> ret = new ArrayList<>();
 
         // Iterate over every known node
-        // TODO pre-compute a hashmap of all nodes
-        edges.forEach((node, outNodes) -> {
+        nodes.forEach(node -> {
             // Put the node and its influence in the top list
             topK.add(new AbstractMap.SimpleEntry<>(node, influence(node)));
 
@@ -309,18 +319,17 @@ public class NetworkInfluence {
             // Add a placeholder for v to set S
             S.add(null);
 
-            // TODO pre-compute a hashmap of all nodes
-            for (Map.Entry<String, List<String>> outEdges : edges.entrySet()) {
+            for (String node : nodes) {
                 // Skip v if it exists in S already
-                if (!SHashSet.contains(outEdges.getKey())) {
+                if (!SHashSet.contains(node)) {
                     // Set the node to calculate the set influence with
-                    S.set(lastIndex, outEdges.getKey());
+                    S.set(lastIndex, node);
                     // Calculate the influence of S \union v
                     float testInfluence = influence(S);
 
                     // Keep track of the set that creates the most influence
                     if (testInfluence > topNewNodeInf) {
-                        topNewNode = outEdges.getKey();
+                        topNewNode = node;
                         topNewNodeInf = testInfluence;
                     }
                 }
