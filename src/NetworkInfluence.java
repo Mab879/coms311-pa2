@@ -168,6 +168,17 @@ public class NetworkInfluence {
      * @return a TreeMap of the depth (starting at 0, the startingNode) and the count of nodes in that depth
      */
     private TreeMap<Integer, Integer> tieredBfs(String startingNode) {
+        return tieredBfs(new String[]{startingNode});
+    }
+
+    /**
+     * Performs a BFS on the whole graph reachable by all startingNodes. Counts the number of nodes in each distance of
+     * the lowest distance starting node. It only considers the shortest path to a node.
+     * @param startingNodes the subset to find distances from
+     * @return a TreeMap of the depth (starting at 0, with each of the startingNodes) and the count of nodes in that
+     * distance
+     */
+    private TreeMap<Integer, Integer> tieredBfs(String[] startingNodes) {
         // <depth, count of nodes in that depth>
         TreeMap<Integer, Integer> ret = new TreeMap<>();
         // Queue of nodes to visit for BFS with distance from startingNode
@@ -175,8 +186,12 @@ public class NetworkInfluence {
         // The nodes that have been added to the BFS queue or processed
         final HashSet<String> visited = new HashSet<>();
 
-        toVisit.add(new AbstractMap.SimpleEntry<>(startingNode, 0));
-        visited.add(startingNode);
+        // Put the starting set into the queue as distances 0
+        for (String startingNode : startingNodes) {
+            toVisit.add(new AbstractMap.SimpleEntry<>(startingNode, 0));
+            visited.add(startingNode);
+        }
+        // Do the BFS traversal
         do {
             Map.Entry<String, Integer> currentNode = toVisit.remove();
 
