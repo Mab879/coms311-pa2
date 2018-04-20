@@ -162,13 +162,31 @@ public class NetworkInfluence {
     }
 
     /**
+     * The influence of the subset on the set, calculated by Sum[1/2^i * |{y|dist(S,y)==i}|, {i, 0, n}]
+     * @param s the subset of nodes to find the influence of
+     * @return the decimal value of the influence of the subset of nodes on the graph
+     */
+    public float influence(ArrayList<String> s) {
+        TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
+        float sum = 0;
+
+        for (Map.Entry<Integer, Integer> depthAndCount : tieredCounts.entrySet()) {
+            sum += 1 / Math.pow(2, depthAndCount.getKey()) * depthAndCount.getValue();
+        }
+
+        return sum;
+    }
+
+    /**
      * Performs a BFS on the whole graph reachable by startingNode. Counts the number of nodes in each distance. It only
      * considers the shortest path to a node.
      * @param startingNode the node to find distances from
      * @return a TreeMap of the depth (starting at 0, the startingNode) and the count of nodes in that depth
      */
     private TreeMap<Integer, Integer> tieredBfs(String startingNode) {
-        return tieredBfs(new String[]{startingNode});
+        ArrayList<String> node = new ArrayList<>();
+        node.add(startingNode);
+        return tieredBfs(node);
     }
 
     /**
@@ -178,7 +196,7 @@ public class NetworkInfluence {
      * @return a TreeMap of the depth (starting at 0, with each of the startingNodes) and the count of nodes in that
      * distance
      */
-    private TreeMap<Integer, Integer> tieredBfs(String[] startingNodes) {
+    private TreeMap<Integer, Integer> tieredBfs(Iterable<String> startingNodes) {
         // <depth, count of nodes in that depth>
         TreeMap<Integer, Integer> ret = new TreeMap<>();
         // Queue of nodes to visit for BFS with distance from startingNode
@@ -212,18 +230,6 @@ public class NetworkInfluence {
         } while (!toVisit.isEmpty());
 
         return ret;
-    }
-
-    /**
-     * The influence of the subset on the set, calculated by Sum[1/2^i * |{y|dist(S,y)==i}|, {i, 0, n}]
-     * @param s the subset of nodes to find the influence of
-     * @return the decimal value of the influence of the subset of nodes on the graph
-     */
-    public float influence(ArrayList<String> s) {
-        // implementation
-
-        // replace this:
-        return -1f;
     }
 
     /**
