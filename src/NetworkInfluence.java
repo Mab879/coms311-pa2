@@ -238,10 +238,25 @@ public class NetworkInfluence {
      * @return a subset of the most k influential nodes
      */
     public ArrayList<String> mostInfluentialDegree(int k) {
-        // implementation
+        // Stores the top k influential nodes by the out degree
+        final TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeOutDegreeComparator());
+        // ArrayList to put the final output in
+        ArrayList<String> ret = new ArrayList<>(k);
 
-        // replace this:
-        return null;
+        // Iterate over every known node
+        edges.forEach((node, outNodes) -> {
+            // Put the node and its out degree in the top list
+            topK.add(new AbstractMap.SimpleEntry<>(node, outDegree(node)));
+
+            // Trim the top list down to k elements
+            while (topK.size() > k) {
+                topK.remove(topK.first());
+            }
+        });
+
+        // Remove the influence (out degree)
+        topK.forEach(nodeAndInfluence -> ret.add(nodeAndInfluence.getKey()));
+        return ret;
     }
 
     /**
@@ -266,5 +281,18 @@ public class NetworkInfluence {
 
         // replace this:
         return null;
+    }
+
+    /**
+     * Sorts nodes by the out degree (and falls back to alphabetical on equal out degrees)
+     */
+    private static class NodeOutDegreeComparator implements Comparator<Map.Entry<String, Integer>> {
+        @Override
+        public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+            if (!o1.getValue().equals(o2.getValue())) {
+                return o1.getValue().compareTo(o2.getValue());
+            }
+            return o1.getKey().compareTo(o2.getKey());
+        }
     }
 }
