@@ -79,6 +79,7 @@ public class NetworkInfluence {
         final HashMap<String, String> parent = new HashMap<>(); // This idea is from Wikipedia: Breadth-first search
 
         toVisit.add(u);
+        parent.put(u, null);
         do {
             String currentNode = toVisit.remove();
             // Did we find the destination (v) node?
@@ -154,6 +155,44 @@ public class NetworkInfluence {
 
         // replace this:
         return -1f;
+    }
+
+    /**
+     * Performs a BFS on the whole graph reachable by startingNode. Counts the number of nodes in each distance. It only
+     * considers the shortest path to a node.
+     * @param startingNode the node to find distances from
+     * @return a TreeMap of the depth (starting at 0, the startingNode) and the count of nodes in that depth
+     */
+    private TreeMap<Integer, Integer> tieredBfs(String startingNode) {
+        // <depth, count of nodes in that depth>
+        TreeMap<Integer, Integer> ret = new TreeMap<>();
+        // Queue of nodes to visit for BFS with distance from startingNode
+        final ArrayDeque<Map.Entry<String, Integer>> toVisit = new ArrayDeque<>();
+        // The nodes that have been added to the BFS queue or processed
+        final HashSet<String> visited = new HashSet<>();
+
+        toVisit.add(new AbstractMap.SimpleEntry<>(startingNode, 0));
+        visited.add(startingNode);
+        do {
+            Map.Entry<String, Integer> currentNode = toVisit.remove();
+
+            // Increment the tier's count in the output object
+            int newCount = ret.getOrDefault(currentNode.getValue(), 0) + 1;
+            ret.put(currentNode.getValue(), newCount);
+
+            // If this node has outgoing edges...
+            if (edges.containsKey(currentNode.getKey())) {
+                // ...add each unvisited child to the queue
+                edges.get(currentNode.getKey()).forEach(dst -> {
+                    if (!visited.contains(dst)) {
+                        toVisit.add(new AbstractMap.SimpleEntry<>(dst, currentNode.getValue() + 1));
+                        visited.add(dst);
+                    }
+                });
+            }
+        } while (!toVisit.isEmpty());
+
+        return ret;
     }
 
     /**
