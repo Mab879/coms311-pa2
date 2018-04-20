@@ -75,28 +75,41 @@ public class NetworkInfluence {
      * is no path.
      */
     public ArrayList<String> shortestPath(String u, String v) {
-        final ArrayList<String> path = new ArrayList<>();
         final ArrayDeque<String> toVisit = new ArrayDeque<>();
         final HashMap<String, String> parent = new HashMap<>(); // This idea is from Wikipedia: Breadth-first search
 
-        // TODO
         toVisit.add(u);
-        String currentNode = toVisit.remove();
-        if (edges.containsKey(currentNode)) {
-            edges.get(currentNode).forEach(dst -> {
-                if (!parent.containsKey(dst)) {
-                    toVisit.add(dst);
-                    parent.put(dst, currentNode);
-                }
-            });
-        }
-        if (currentNode.equals(v)) {
-            return path;
-        }
-        // implementation
+        do {
+            String currentNode = toVisit.remove();
+            // Did we find the destination (v) node?
+            if (currentNode.equals(v)) {
+                // Node for navigating back to node u
+                String backNode = currentNode;
+                // A stack used to reverse the back trace
+                Stack<String> path = new Stack<>();
 
-        // replace this:
-        return null;
+                // Navigate through the backlinks from v to u
+                do {
+                    path.push(backNode);
+                    backNode = parent.get(backNode);
+                } while (!backNode.equals(u));
+                path.push(backNode);
+                return new ArrayList<>(path);
+            }
+            // If this node has outgoing edges...
+            if (edges.containsKey(currentNode)) {
+                // ...add each unvisited child to the queue
+                edges.get(currentNode).forEach(dst -> {
+                    if (!parent.containsKey(dst)) {
+                        toVisit.add(dst);
+                        parent.put(dst, currentNode);
+                    }
+                });
+            }
+        } while (!toVisit.isEmpty());
+
+        // No path was found.
+        return new ArrayList<>();
     }
 
     /**
