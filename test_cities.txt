@@ -1,0 +1,6 @@
+4
+Ames Minneapolis
+Minneapolis Chicago
+Chicago Ames
+Ames Omaha
+Omaha Chicago

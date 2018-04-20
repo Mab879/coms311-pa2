@@ -98,15 +98,15 @@ public class NetworkInfluence {
             if (currentNode.equals(v)) {
                 // Node for navigating back to node u
                 String backNode = currentNode;
-                // A stack used to reverse the back trace
-                Stack<String> path = new Stack<>();
+                // A list used to reverse the back trace
+                LinkedList<String> path = new LinkedList<>();
 
                 // Navigate through the backlinks from v to u
-                do {
-                    path.push(backNode);
+                while (!backNode.equals(u)) {
+                    path.addFirst(backNode);
                     backNode = parent.get(backNode);
-                } while (!backNode.equals(u));
-                path.push(backNode);
+                }
+                path.addFirst(backNode);
                 return new ArrayList<>(path);
             }
             // If this node has outgoing edges...
@@ -324,7 +324,7 @@ public class NetworkInfluence {
                 if (!SHashSet.contains(node)) {
                     // Set the node to calculate the set influence with
                     S.set(lastIndex, node);
-                    // Calculate the influence of S \union v
+                    // Calculate the influence of S \\union v
                     float testInfluence = influence(S);
 
                     // Keep track of the set that creates the most influence
