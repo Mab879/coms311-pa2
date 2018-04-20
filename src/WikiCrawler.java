@@ -55,7 +55,7 @@ public class WikiCrawler {
     /**
      * List of Urls Crawled
      */
-    private ArrayList<String> visited;
+    private HashSet<String> visited;
     /**
      *  A list of Key Value pairs of entries
      */
@@ -80,7 +80,7 @@ public class WikiCrawler {
         requestCount = 0;
         graph = new ArrayList<>();
         q = new ArrayDeque<>();
-        visited = new ArrayList<>();
+        visited = new HashSet<>();
         this.topics = topics;
         links = new HashMap<>();
     }
