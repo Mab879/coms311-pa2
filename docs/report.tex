@@ -102,15 +102,33 @@ function distance(ArrayList<String> s, String v)
 \subsection{\texttt{influence(ArrayList<String> s)}}
 \begin{verbatim}
 function influence
+	TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
+	sum = 0
+
+	for depthAndCount in tieredCounts
+		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+
+	return sum
 \end{verbatim}
 \subsection{\texttt{mostInfluentialDegree(int k)}}
+\begin{verbatim}
+function 
+    TreeSet<Map.Entry<String, Integer>> topK
+\end{verbatim}
 \subsection{\texttt{mostInfluentialModular(int k)}}
 \subsection{\texttt{mostInfluentialSubModular(int k)}}
+\subsection{\texttt{tieredBfs(String startingNode)}}
+This method is private, however it is used two places in public methods. Thus,
+it is placed here for brevity in the public methods.
+\begin{verbatim}
+function tieredBfs(String startingNode)
+    return tieredBfs({startingNode});
+\end{verbatim}
 \subsection{\texttt{tieredBfs(Iterable<String> startingNodes)}}
 This method is private, however it is used two places in public methods. Thus,
 it is placed here for brevity in the public methods.
 \begin{verbatim}
-function tieredBfs
+function tieredBfs(Iterable<String> startingNodes)
     TreeMap<Int, Int> ret = new TreeMap<>();
     ArrayDeque<Map.Entry<String, Integer>> toVisit = new ArrayDeque<>()
     HashSet<String> visited = new HashSet<>()
