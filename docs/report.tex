@@ -99,10 +99,20 @@ function distance(ArrayList<String> s, String v)
     return minDist
 \end{verbatim}
 \subsection{\texttt{influence(String s)}}
+\begin{verbatim}
+function influence(s)
+	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
+	sum = 0
+
+	for depthAndCount in tieredCounts
+		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+
+	return sum
+\end{verbatim}
 \subsection{\texttt{influence(ArrayList<String> s)}}
 \begin{verbatim}
-function influence
-	TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
+function influence(ArrayList<String> s)
+	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
 	sum = 0
 
 	for depthAndCount in tieredCounts
@@ -112,11 +122,66 @@ function influence
 \end{verbatim}
 \subsection{\texttt{mostInfluentialDegree(int k)}}
 \begin{verbatim}
-function 
-    TreeSet<Map.Entry<String, Integer>> topK
+function mostInfluentialDegree(int k)
+     TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
+     
+      ArrayList<String> ret = new ArrayList<>(k);
+      
+      for node in nodes
+          topK.add(new Map.Entry(node, outDegree(node))
+          
+          while topK.size > k
+          	topK.remove(topK.first)
+       
+       for nodeAndInfluence in topK
+           ret.add(nodeAndInfluence.key)
+       
+       return ret
 \end{verbatim}
 \subsection{\texttt{mostInfluentialModular(int k)}}
+\begin{verbatim}
+function mostInfluentialModular(int k)
+     TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
+     
+      ArrayList<String> ret = new ArrayList<>(k);
+      
+      for node in nodes
+          topK.add(new Map.Entry(node, influence(node))
+          
+          while topK.size > k
+          	topK.remove(topK.first)
+       
+       for nodeAndInfluence in topK
+           ret.add(nodeAndInfluence.key)
+       
+       return ret
+\end{verbatim}
 \subsection{\texttt{mostInfluentialSubModular(int k)}}
+\begin{verbatim}
+function mostInfluentialSubModular(int k)
+    ArrayList<String> S = new ArrayList()
+    HashSet<String> SHashSet = new HashSet<>()
+    
+    for i = 0 to k - 1
+         String topNewNode = null;
+         float topNewNodeInf = Float.NEGATIVE_INFINITY;
+         int lastIndex = S.size();
+         
+         s.add(null)
+         
+         for node in nodes
+             if not SHashSet.contains(node)
+                S.set(lastIndex, node)
+                float testInfluence = influence(S);
+                if testInfluence > topNewNodeInf
+                   topNewNode = node;
+                   topNewNodeInf = testInfluence;
+        
+        S.set(lastIndex, topNewNode)
+        SHashSet.add(topNewNode)
+       
+    return S
+\end{verbatim}
 \subsection{\texttt{tieredBfs(String startingNode)}}
 This method is private, however it is used two places in public methods. Thus,
 it is placed here for brevity in the public methods.
