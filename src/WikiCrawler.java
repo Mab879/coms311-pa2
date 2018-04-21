@@ -49,9 +49,9 @@ public class WikiCrawler {
      */
     private int pagesCount;
     /**
-     * List of Urls Crawled
+     * List of Urls Crawled and the outgoing links (in and out of the graph)
      */
-    private HashSet<String> visited = new HashSet<>();
+    private HashMap<String, ArrayList<String>> visited = new HashMap<>();
     /**
      *  A list of Key Value pairs of entries
      */
@@ -60,6 +60,8 @@ public class WikiCrawler {
      * Hash map of Dest > list of pages that link to it
      */
     private HashMap<String, ArrayList<String>> links = new HashMap<>();
+
+    HashMap<String, ArrayList<String>> outLinks = new HashMap<>();
 
     /**
      * Create a Wiki Crawler
@@ -84,10 +86,15 @@ public class WikiCrawler {
 
         // Add the seed url to the queue
         q.add(seedUrl);
-        visited.add(seedUrl);
+        visited.put(seedUrl, new ArrayList<>());
         while (!q.isEmpty() && pagesCount < max) {
             // Remove from the top of the queue
             String currentPath = q.remove();
+
+            // Print status
+            System.out.print("Crawling " + currentPath + " ... ");
+            System.out.flush();
+
             String html;
             try {
                 // Get page HTML
@@ -112,6 +119,8 @@ public class WikiCrawler {
 
             // If the page does not have all the topics, do not process it further
             if (hasAllTopics) {
+                System.out.println("relevant");
+
                 // Add the pages that linked to me to the graph
                 ArrayList<String> pagesLinkedToMe = links.get(currentPath);
                 if (pagesLinkedToMe != null) {
@@ -121,16 +130,18 @@ public class WikiCrawler {
                 }
 
                 // Enqueue all links on the page
-                ArrayList<String> linksHTML = getLinks(html);
+                ArrayList<String> linksHTML = getLinks(html, currentPath);
+                visited.put(currentPath, linksHTML);
                 for (String link : linksHTML) {
                     // If the URL is not visited, add it to the queue
-                    if (!visited.contains(link)) {
+                    if (!visited.containsKey(link)) {
                         q.add(link);
-                        visited.add(link);
                         appendToLinksList(currentPath, link);
                     }
                 }
                 pagesCount++;
+            } else {
+                System.out.println("not relevant");
             }
         }
         writeGraph();
@@ -146,8 +157,17 @@ public class WikiCrawler {
             fw.write(Integer.toString(pagesCount) + "\n");
 
             // Write each edge
-            for (Map.Entry entry : graph) {
-                fw.write(entry.getKey() + " " + entry.getValue() + "\n");
+//            for (Map.Entry entry : graph) {
+//                fw.write(entry.getKey() + " " + entry.getValue() + "\n");
+//            }
+            for (Map.Entry<String, ArrayList<String>> outLinks : visited.entrySet()) {
+                for (String dst : outLinks.getValue()) {
+                    // Is the destination a node in the graph?
+                    if (visited.containsKey(dst)) {
+                        // If so, this edge is valid
+                        fw.write(outLinks.getKey() + " " + dst + "\n");
+                    }
+                }
             }
             fw.flush();
         } catch (IOException e) {
@@ -197,17 +217,17 @@ public class WikiCrawler {
      * @param html html of the page as string
      * @return a list of links
      */
-    private ArrayList<String> getLinks(String html) {
-        int pTag = html.indexOf("<p>");
-        String parseString = html.substring(pTag+3);
+    private ArrayList<String> getLinks(String html, String srcUrl) {
+        String parseString = html.substring(html.indexOf("<p>") + 3);
         String pTagPattern = "<a[^>]* href=\"(.*?)\"";
         Pattern htmlPattern = Pattern.compile(pTagPattern);
         Matcher m = htmlPattern.matcher(parseString);
-        ArrayList<String> urls = new ArrayList<>();
+        HashSet<String> urls = new HashSet<>();
         String currentUrl;
         while (m.find()) {
             currentUrl = m.group().replace("\"", "")
-                                  .replace("href=", "").replace(" ", "")
+                                  .replace("href=", "")
+                                  .replace(" ", "")
                                   .replace("<a", "");
             if (!currentUrl.contains(":") && !currentUrl.contains("#")) {
                 urls.add(currentUrl);
@@ -215,7 +235,7 @@ public class WikiCrawler {
         }
         ArrayList<String> result = new ArrayList<>();
         for (String url : urls) {
-            if (url.startsWith("/wiki")) {
+            if (url.startsWith("/wiki") && !srcUrl.equals(url)) {
                 result.add(url);
             }
         }
