@@ -301,4 +301,6 @@ The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt
 The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt{topK} take $O(log k)$ each. Calculating the influence takes $O(|Nodes|*|Edges|)$, as stated above. The last foreach, outside of the main loop, is $O(k)$. So the run time is $O(|Nodes|^2*|Edges|)$.
 \subsection{\texttt{mostInfluentialSubModular}}
 The outer loop is $O(k)$. The arraylist operations (set and add) take $O(1)$. The hashset operations (contains and add) take $O(1)$. The inner for-loop is $O(|Nodes|)$. Calculating the influence takes $O(|Nodes|*|Edges|)$, as stated above. Thus the run time is $O(|Nodes|^2*|Edges|*k)$.
+\subsection{\texttt{distance(String u, String v)}}
+This method calls $shortestPath(u, v)$ which as described above takes $O(|Edges| * |Nodes|)$. Then 1 is subtracted from it, which takes $O(1)$. Thus giving us a run-time of $O(|Edges| * |Nodes|)$.
 \end{document}
