@@ -14,7 +14,7 @@
 \subsection{Q}
 We used an \texttt{ArrayDeque<String>} for $Q$. We needed a simple queue that lets us enqueue and dequeue items. In Java, the \texttt{ArrayDeque} is one of the most basic queues. It was a trivial choice to make the queue hold \texttt{String}s for the nodes. There was no obvious contender on that choice.
 \subsection{Visited}
-We used a \texttt{HashSet<String>} for $visited$. The operations we need are inserting new URLs and checking for the existence of URLs. The \texttt{HashSet} gives us $O(1)$ time complexity for both of those operations (assuming hash functions of $O(1)$. The \texttt{HashSet} implements what we need and does the operations quickly.
+We used a \texttt{HashMap<String, List<String>>} for $visited$. The operations we need are inserting new URLs, checking for the existence of URLs as keys, and iterating through all keys with their values. The \texttt{HashMap} gives us $O(1)$ time complexity for those operations (assuming hash functions of $O(1)$). The \texttt{HashMap} implements what we need and does the operations quickly.
 
 In \texttt{NetworkInfluence}, we used a \texttt{HashMap<String, String>} to serve a dual purpose. First, the key served the same purpose as the \texttt{HashSet<String> visited} above. Second, this map stored the "backlink" to allow locating the path used to traverse the graph. The \texttt{HashMap} works quite well, because the important operations (contains key and get value by key) are all $O(1)$.
 \section{Top 10 most influential nodes}
@@ -254,6 +254,7 @@ function tieredBfs(Iterable<String> startingNodes)
 \end{verbatim}
 \section{Run-time}
 \subsection{Constructor}
+It iterates through each line (edge) of the input file. So the main loop is $O(|Edges|)$. \texttt{edges} and \texttt{nodes} are hashed collections, which means the add operations take $O(1)$. All other operations in the constructor are constant or bounded by the URL length. The practical run time is thus $O(|Edges|)$.
 \subsection{\texttt{outDegree}}
 We assume that perfect hash function exists, thus $O(1)$ is need for the \texttt{containKey(v)} method and the run-time for \texttt{get(v)} is also $O(1)$. The call for getting the size of the \texttt{ArrayList} of the key is also $O(1)$.
 Thus the run time is $O(1)$.
