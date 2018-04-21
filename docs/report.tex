@@ -298,7 +298,7 @@ take $O(1)$. Then we times that value by \texttt{depthAndCount.getValue()} which
 \subsection{\texttt{mostInfluentialDegree}}
 The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt{topK} take $O(log k)$ each. Calculating the out degree was decided to be $O(1)$ as stated above. The last foreach, outside of the main loop, is $O(k)$. So we have $O(|Nodes|*log k)+O(k)$. When $|Nodes|<k$, $k=|Nodes|$, and the first term dominates. Thus the run time is $O(|Nodes|*log k)$
 \subsection{\texttt{mostInfluentialModular}}
-The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt{topK} take $O(log k)$ each. Calculating the influence takes <TODO> as stated above. The last foreach, outside of the main loop, is $O(k)$.
+The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt{topK} take $O(log k)$ each. Calculating the influence takes $O(|Nodes|*|Edges|)$, as stated above. The last foreach, outside of the main loop, is $O(k)$. So the run time is $O(|Nodes|^2*|Edges|)$.
 \subsection{\texttt{mostInfluentialSubModular}}
-The outer loop is $O(k)$. The arraylist operations (set and add) take $O(1)$. The hashset operations (contains and add) take $O(1)$. The inner for-loop is $O(|Nodes|)$. Calculating the influence takes <TODO> as stated above. Thus the run time is $O(|Nodes|*k$ <TODO influence>.
+The outer loop is $O(k)$. The arraylist operations (set and add) take $O(1)$. The hashset operations (contains and add) take $O(1)$. The inner for-loop is $O(|Nodes|)$. Calculating the influence takes $O(|Nodes|*|Edges|)$, as stated above. Thus the run time is $O(|Nodes|^2*|Edges|*k)$.
 \end{document}
