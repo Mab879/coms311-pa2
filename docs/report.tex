@@ -69,6 +69,19 @@ function distance(ArrayList<String> s, String v)
 \subsection{\texttt{mostInfluentialSubModular(int k)}}
 \section{Run-time}
 \subsection{Constructor}
+\begin{verbatim}
+function NetworkInfluence(file)
+    vertexCount = file.readInt()
+    while file.hasMoreLines()
+        line = file.readLine().split(" ")
+        // edges is a HashMap<node, List<node>>.
+        // Either initialize the list or append to the list if it exists.
+        edges.createOrAppendToList(line[0], line[1])
+        
+        // nodes is a hashmap, so no duplicates are created when nodes are re-encountered
+        nodes.add(line[0])
+        nodes.add(line[1])
+\end{verbatim}
 \subsection{\texttt{outDegree}}
 We assume that perfect hash function exists thus $O(1)$ is need for the\texttt{containKey(v)} method and the run-time for \texttt{get(v)} is also $O(1)$. The call for getting the size of the \texttt{ArrayList} of the key is also $O(1)$.
 Thus the run time is $O(1)$.
