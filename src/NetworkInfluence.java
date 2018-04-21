@@ -163,7 +163,7 @@ public class NetworkInfluence {
      * @return the decimal value of the influence of the node on the graph
      */
     public float influence(String u) {
-        TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
+        Map<Integer, Integer> tieredCounts = tieredBfs(u);
         float sum = 0;
 
         for (Map.Entry<Integer, Integer> depthAndCount : tieredCounts.entrySet()) {
@@ -179,7 +179,7 @@ public class NetworkInfluence {
      * @return the decimal value of the influence of the subset of nodes on the graph
      */
     public float influence(ArrayList<String> s) {
-        TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
+        Map<Integer, Integer> tieredCounts = tieredBfs(s);
         float sum = 0;
 
         for (Map.Entry<Integer, Integer> depthAndCount : tieredCounts.entrySet()) {
@@ -195,7 +195,7 @@ public class NetworkInfluence {
      * @param startingNode the node to find distances from
      * @return a TreeMap of the depth (starting at 0, the startingNode) and the count of nodes in that depth
      */
-    private TreeMap<Integer, Integer> tieredBfs(String startingNode) {
+    private Map<Integer, Integer> tieredBfs(String startingNode) {
         ArrayList<String> node = new ArrayList<>();
         node.add(startingNode);
         return tieredBfs(node);
@@ -208,9 +208,9 @@ public class NetworkInfluence {
      * @return a TreeMap of the depth (starting at 0, with each of the startingNodes) and the count of nodes in that
      * distance
      */
-    private TreeMap<Integer, Integer> tieredBfs(Iterable<String> startingNodes) {
+    private Map<Integer, Integer> tieredBfs(Iterable<String> startingNodes) {
         // <depth, count of nodes in that depth>
-        TreeMap<Integer, Integer> ret = new TreeMap<>();
+        HashMap<Integer, Integer> ret = new HashMap<>();
         // Queue of nodes to visit for BFS with distance from startingNode
         final ArrayDeque<Map.Entry<String, Integer>> toVisit = new ArrayDeque<>();
         // The nodes that have been added to the BFS queue or processed
