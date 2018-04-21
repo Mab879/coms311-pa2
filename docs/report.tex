@@ -19,8 +19,44 @@ We used a \texttt{HashSet<String>} for $visited$. The operations we need are ins
 In \texttt{NetworkInfluence}, we used a \texttt{HashMap<String, String>} to serve a dual purpose. First, the key served the same purpose as the \texttt{HashSet<String> visited} above. Second, this map stored the "backlink" to allow locating the path used to traverse the graph. The \texttt{HashMap} works quite well, because the important operations (contains key and get value by key) are all $O(1)$.
 \section{Top 10 most influential nodes}
 \subsection{computed by mostInfluentialDegree}
+\begin{itemize}
+\item /wiki/Embedded\_system
+\item /wiki/Peripheral
+\item /wiki/Information\_Age
+\item /wiki/Computer\_graphics\_(computer\_science)
+\item /wiki/Computational\_complexity\_theory
+\item /wiki/Mathematical\_logic
+\item /wiki/Computing\_technology
+\item /wiki/Software\_development
+\item /wiki/Programming\_paradigm
+\item /wiki/Computer\_Science
+\end{itemize}
 \subsection{computed bymostInfluentialModular}
+\begin{itemize}
+\item /wiki/Peripheral
+\item /wiki/Lois\_Haibt
+\item /wiki/Information\_Age
+\item /wiki/Computational\_complexity\_theory
+\item /wiki/Mathematical\_logic
+\item /wiki/Software\_development
+\item /wiki/Programming\_paradigm
+\item /wiki/Computer\_graphics\_(computer\_science)
+\item /wiki/Computing\_technology
+\item /wiki/Computer\_Science
+\end{itemize}
 \subsection{computed by mostInfluentialSubModular}
+\begin{itemize}
+\item /wiki/Computer\_Science
+\item /wiki/Video\_post-processing
+\item /wiki/Natural\_science
+\item /wiki/Legged\_Squad\_Support\_System
+\item /wiki/Historical\_Dictionary\_of\_Switzerland
+\item /wiki/Interpreter\_(computing)
+\item /wiki/Neolithic\_Revolution
+\item /wiki/Glossary\_of\_geology
+\item /wiki/Word\_processor
+\item /wiki/Glossary\_of\_biology
+\end{itemize}
 \section{Pseudo Code}
 \subsection{Constructor}
 \begin{verbatim}
