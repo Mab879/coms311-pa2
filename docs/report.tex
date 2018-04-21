@@ -264,4 +264,6 @@ The queue only receives each node at most once, so the main loop is bounded by $
 The if-statement in the main loop only executes at most once (ends with return), so it is added to the run time of the nested loops. It consists of navigating a subset of edges, so it is $O(|Edges|)$. Adding to the linked list takes $O(1)$. Navigating the hashmap of back edges takes $O(1)$ for each lookup. So the if-statement is $O(|Edges|)$.
 
 This comes down to $O(|Edges|*|Nodes|)+O(|Edges|)$. Simplifies to $O(|Edges|*|Nodes|)$.
+\subsection{\texttt{tieredBfs} (private helper method)}
+The queue only receives each node at most once, so the main loop is bounded by $O(|Nodes|)$. The queue and hashset operations used (add, remove, isEmpty, and contains) are $O(1)$. In the worst case, each edge is visited in the inner for loop, which is $O(|Edges|)$. The \texttt{ret} hashmap get and put operations takes $O(1)$. So the run time is $O(|Nodes|*|Edges|)$.
 \end{document}
