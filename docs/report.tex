@@ -268,4 +268,8 @@ This comes down to $O(|Edges|*|Nodes|)+O(|Edges|)$. Simplifies to $O(|Edges|*|No
 The queue only receives each node at most once, so the main loop is bounded by $O(|Nodes|)$. The queue and hashset operations used (add, remove, isEmpty, and contains) are $O(1)$. In the worst case, each edge is visited in the inner for loop, which is $O(|Edges|)$. The \texttt{ret} hashmap get and put operations takes $O(1)$. So the run time is $O(|Nodes|*|Edges|)$.
 \subsection{\texttt{mostInfluentialDegree}}
 The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt{topK} take $O(log k)$ each. Calculating the out degree was decided to be $O(1)$ as stated above. The last foreach, outside of the main loop, is $O(k)$. So we have $O(|Nodes|*log k)+O(k)$. When $|Nodes|<k$, $k=|Nodes|$, and the first term dominates. Thus the run time is $O(|Nodes|*log k)$
+\subsection{\texttt{mostInfluentialModular}}
+The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt{topK} take $O(log k)$ each. Calculating the influence takes <TODO> as stated above. The last foreach, outside of the main loop, is $O(k)$.
+\subsection{\texttt{mostInfluentialSubModular}}
+The outer loop is $O(k)$. The arraylist operations (set and add) take $O(1)$. The hashset operations (contains and add) take $O(1)$. The inner for-loop is $O(|Nodes|)$. Calculating the influence takes <TODO> as stated above. Thus the run time is $O(|Nodes|*k$ <TODO influence>.
 \end{document}
