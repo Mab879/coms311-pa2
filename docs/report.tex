@@ -282,7 +282,19 @@ Math.pow(2, depthAndCount.getKey())
 \end{verbatim}
 Which is $O(1)$ as JVM has some efficient ways of doing \texttt{Math.pow}, \href{https://stackoverflow.com/a/32419139/749721}{source}.
 Then we divide $1$ by \texttt{Math.pow(2, depthAndCount.getKey())} which will
-take $O(1)$. Then we times that value by \texttt{depthAndCount.getValue()} which should also take $O(1)$. Finally, we this value add to the value of \texttt{sum} which also takes $O(1)$.Which gives the overall run-time of $O|Edges| * |Node| + |Edges)$.
+take $O(1)$. Then we times that value by \texttt{depthAndCount.getValue()} which should also take $O(1)$. Finally, we this value add to the value of \texttt{sum} which also takes $O(1)$.Which gives the overall run-time of $O(|Edges| * |Node|$.
+\subsection{\texttt{influence(ArrayList<String> s)}}
+Very similar to \texttt{influence(String s)} as code paths are basically the same.
+
+First the method calls tieredBfs(s) which takes $O(|Edges| * |Node|)$\\
+For each entry in the \texttt{HashMap}, which worst case would be $O(|Edges|)$, we do the following calculations.
+
+\begin{verbatim}
+Math.pow(2, depthAndCount.getKey()) 
+\end{verbatim}
+Which is $O(1)$ as JVM has some efficient ways of doing \texttt{Math.pow}, \href{https://stackoverflow.com/a/32419139/749721}{source}.
+Then we divide $1$ by \texttt{Math.pow(2, depthAndCount.getKey())} which will
+take $O(1)$. Then we times that value by \texttt{depthAndCount.getValue()} which should also take $O(1)$. Finally, we this value add to the value of \texttt{sum} which also takes $O(1)$.Which gives the overall run-time of $O(|Edges| * |Node|$.
 \subsection{\texttt{mostInfluentialDegree}}
 The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt{topK} take $O(log k)$ each. Calculating the out degree was decided to be $O(1)$ as stated above. The last foreach, outside of the main loop, is $O(k)$. So we have $O(|Nodes|*log k)+O(k)$. When $|Nodes|<k$, $k=|Nodes|$, and the first term dominates. Thus the run time is $O(|Nodes|*log k)$
 \subsection{\texttt{mostInfluentialModular}}
