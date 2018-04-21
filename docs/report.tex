@@ -114,13 +114,13 @@ function distance(String u, String v)
 \subsection{\texttt{influence(String u) }}
 \begin{verbatim}
 function influence(String u)
-    TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
-    sum = 0
+	TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
+	sum = 0
 
-    for depthAndCount in tieredCounts
-        sum += 1 / 2^depthAndCount.key * depthAndCount.value
+	for depthAndCount in tieredCounts
+		sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-    return sum
+	return sum
 \end{verbatim}
 \subsection{\texttt{distance(ArrayList<String> s, String v)}}
 \begin{verbatim}
@@ -137,24 +137,24 @@ function distance(ArrayList<String> s, String v)
 \subsection{\texttt{influence(String s)}}
 \begin{verbatim}
 function influence(s)
-    TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
-    sum = 0
+	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
+	sum = 0
 
-    for depthAndCount in tieredCounts
-        sum += 1 / 2^depthAndCount.key * depthAndCount.value
+	for depthAndCount in tieredCounts
+		sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-    return sum
+	return sum
 \end{verbatim}
 \subsection{\texttt{influence(ArrayList<String> s)}}
 \begin{verbatim}
 function influence(ArrayList<String> s)
-    TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
-    sum = 0
+	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
+	sum = 0
 
-    for depthAndCount in tieredCounts
-        sum += 1 / 2^depthAndCount.key * depthAndCount.value
+	for depthAndCount in tieredCounts
+		sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-    return sum
+	return sum
 \end{verbatim}
 \subsection{\texttt{mostInfluentialDegree(int k)}}
 \begin{verbatim}
@@ -258,4 +258,10 @@ It iterates through each line (edge) of the input file. So the main loop is $O(|
 \subsection{\texttt{outDegree}}
 We assume that perfect hash function exists, thus $O(1)$ is need for the \texttt{containKey(v)} method and the run-time for \texttt{get(v)} is also $O(1)$. The call for getting the size of the \texttt{ArrayList} of the key is also $O(1)$.
 Thus the run time is $O(1)$.
+\subsection{\texttt{shortestPath}}
+The queue only receives each node at most once, so the main loop is bounded by $O(|Nodes|)$. The queue and hashmap operations used (add, put, remove, isEmpty, and containsKey) are $O(1)$. In the worst case, each edge is visited in the inner for loop, which is $O(|Edges|)$.
+
+The if-statement in the main loop only executes at most once (ends with return), so it is added to the run time of the nested loops. It consists of navigating a subset of edges, so it is $O(|Edges|)$. Adding to the linked list takes $O(1)$. Navigating the hashmap of back edges takes $O(1)$ for each lookup. So the if-statement is $O(|Edges|)$.
+
+This comes down to $O(|Edges|*|Nodes|)+O(|Edges|)$. Simplifies to $O(|Edges|*|Nodes|)$.
 \end{document}
