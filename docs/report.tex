@@ -39,7 +39,7 @@ function shortestPath
    			do 
    				path.push(backNode)
    				backNode = parent.get(backend)
-   			while !backNode == u
+   			while not backNode == u
    			
 \end{verbatim}
 \subsection{\texttt{distance(String u, String v)}}
@@ -47,10 +47,21 @@ function shortestPath
 function distance(String u, String v) 
    	return shortestPath(u,v).size() - 1
 \end{verbatim}
+\subsection{\texttt{influence(String u) }}
+\begin{verbatim}
+function influence(String u)
+	TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
+	sum = 0
+	
+	for depthAndCount in tieredCounts
+		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+		
+	return sum
+\end{verbatim}	
 \subsection{\texttt{distance(ArrayList<String> s, String v)}}
 \begin{verbatim}
 function distance(ArrayList<String> s, String v) 
-       minDistance = Int.MAX_VALUE
+    int minDistance = Int.MAX_VALUE
     for node in s
         int thisDist = shortestPath(u,v)
         if thisDist != -1 && thisDist < minDistance
@@ -60,9 +71,39 @@ function distance(ArrayList<String> s, String v)
         return minDist
 \end{verbatim}
 \subsection{\texttt{influence(ArrayList<String> s)}}
+\begin{verbatim}
+function influence
+\end{verbatim}
 \subsection{\texttt{mostInfluentialDegree(int k)}}
 \subsection{\texttt{mostInfluentialModular(int k)}}
 \subsection{\texttt{mostInfluentialSubModular(int k)}}
+\subsection{\texttt{tieredBfs(Iterable<String> startingNodes)}}
+This method is private, however it is used two places in public methods. Thus,
+it is placed here for brevity in the public methods. 
+\begin{verbatim}
+function tieredBfs
+    TreeMap<Int, Int> ret = new TreeMap<>();
+    ArrayDeque<Map.Entry<String, Integer>> toVisit = new ArrayDeque<>()
+    HashSet<String> visited = new HashSet<>()
+	
+    for startingNode in startingNodes
+        toVisit.add(new Map.Entry<>(startingNode, 0))
+        visited.add(startingNode)
+	
+    do
+        Map.Entry<String, Integer> currentNode = toVisit.remove()
+        int newCount = ret.getOrDefault(currentNode.getValue(), 0) + 1        
+        ret.put(currentNode.value, newCount
+        
+        if edges.containsKey(currentNode.getKey())
+            for dst in edges.get(currentNode.getKey())
+                if not visited.contains(dst)
+                    toVisit.add(new Map.Entry(dst, currentNode.value + 1)
+                    visited.add(dst)
+     while not toVisit.isEmpty()
+     
+     return ret
+\end{verbatim}
 \section{Run-time}
 \subsection{Constructor}
 \subsection{\texttt{outDegree}}
