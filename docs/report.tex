@@ -36,28 +36,37 @@ function NetworkInfluence(file)
 \end{verbatim}
 \subsection{\texttt{outDegree}}
 \begin{verbatim}
-function outDegree(String v)
-    if (edges.containKey(v))
-        return edges.get(v).size();
+function outDegree(v)
+    if edges.containKey(v)
+        return edges.get(v).size()
 	return 0
 \end{verbatim}
 \subsection{\texttt{shortestPath}}
 \begin{verbatim}
-function shortestPath
+function shortestPath(u, v)
    	Queue toVisit
    	HashMap<String, String> parent
+   	
    	toVisit.add(u)
    	parent.put(u, null)
    	do
    	    currentNode = toVisit.remove()
    	    if currentNode == v
    	        backNode = currentNode
-   	        Stack path
+   	        List path
    	        do 
-   	            path.push(backNode)
+   	            path.addFront(backNode)
    	            backNode = parent.get(backend)
    	        while !backNode == u
-   			
+   	        return path
+   	    foreach child in edges.get(currentNode)
+   	        if !parent.containsKey(child)
+   	            // Store the backlink
+   	            parent.put(child, currentNode)
+   	            toVisit.add(child)
+   	while !toVisit.empty()
+   	// No path
+   	return {}
 \end{verbatim}
 \subsection{\texttt{distance(String u, String v)}}
 \begin{verbatim}
