@@ -78,15 +78,16 @@ function distance(String u, String v)
 \subsection{\texttt{distance(ArrayList<String> s, String v)}}
 \begin{verbatim}
 function distance(ArrayList<String> s, String v) 
-        minDistance = Int.MAX_VALUE
-    for node in s
+    minDistance = Int.MAX_VALUE
+    foreach node in s
         int thisDist = shortestPath(u,v)
         if thisDist != -1 && thisDist < minDistance
             minDistance = thisDist
-        if thisIdst == Int.MAX_VALUE
-            return -1
-        return minDist
+    if thisDist == Int.MAX_VALUE
+        return -1
+    return minDist
 \end{verbatim}
+\subsection{\texttt{influence(String s)}}
 \subsection{\texttt{influence(ArrayList<String> s)}}
 \subsection{\texttt{mostInfluentialDegree(int k)}}
 \subsection{\texttt{mostInfluentialModular(int k)}}
