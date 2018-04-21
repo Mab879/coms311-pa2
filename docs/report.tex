@@ -294,4 +294,7 @@ The main for loop is obviously $O(|Nodes|)$. Adding to and deleting from \texttt
 The outer loop is $O(k)$. The arraylist operations (set and add) take $O(1)$. The hashset operations (contains and add) take $O(1)$. The inner for-loop is $O(|Nodes|)$. Calculating the influence takes $O(|Nodes|*|Edges|)$, as stated above. Thus the run time is $O(|Nodes|^2*|Edges|*k)$.
 \subsection{\texttt{distance(String u, String v)}}
 This method calls $shortestPath(u, v)$ which as described above takes $O(|Edges| * |Nodes|)$. Then 1 is subtracted from it, which takes $O(1)$. Thus giving us a run-time of $O(|Edges| * |Nodes|)$.
+\subsection{\texttt{distance(ArrayList<String> s, String v)}}
+The $distance$, which was previous shown to be $O(|Edges| * |Nodes|)$, function is called $|s|$ times with a few $O(1)$ operations thus our 
+run time is $O(s |Edges| * |Nodes|)$.
 \end{document}
