@@ -114,13 +114,13 @@ function distance(String u, String v)
 \subsection{\texttt{influence(String u) }}
 \begin{verbatim}
 function influence(String u)
-	TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
-	sum = 0
+    TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
+    sum = 0
 
-	for depthAndCount in tieredCounts
-		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+    for depthAndCount in tieredCounts
+        sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-	return sum
+    return sum
 \end{verbatim}
 \subsection{\texttt{distance(ArrayList<String> s, String v)}}
 \begin{verbatim}
@@ -137,24 +137,24 @@ function distance(ArrayList<String> s, String v)
 \subsection{\texttt{influence(String s)}}
 \begin{verbatim}
 function influence(s)
-	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
-	sum = 0
+    TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
+    sum = 0
 
-	for depthAndCount in tieredCounts
-		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+    for depthAndCount in tieredCounts
+        sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-	return sum
+    return sum
 \end{verbatim}
 \subsection{\texttt{influence(ArrayList<String> s)}}
 \begin{verbatim}
 function influence(ArrayList<String> s)
-	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
-	sum = 0
+    TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
+    sum = 0
 
-	for depthAndCount in tieredCounts
-		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+    for depthAndCount in tieredCounts
+        sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-	return sum
+    return sum
 \end{verbatim}
 \subsection{\texttt{mostInfluentialDegree(int k)}}
 \begin{verbatim}
