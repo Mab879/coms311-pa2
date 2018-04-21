@@ -23,7 +23,7 @@ public class WikiCrawler {
     /**
      * Base URL of search
      */
-    static final String BASE_URL = "https://en.wikipedia.org";
+    public static final String BASE_URL = "https://en.wikipedia.org";
     /**
      * Url of page to start at
      */
@@ -41,29 +41,25 @@ public class WikiCrawler {
      */
     private ArrayList<String> topics;
     /**
-     * DFS Queue
-     */
-    private Queue<String> q = new LinkedList<>();
-    /**
      * Total number pages crawled
      */
-    private int requestCount;
+    private int requestCount = 0;
     /**
-     * Number of pages Crawled
+     * Number of pages Crawled (vertices on the graph)
      */
     private int pagesCount;
     /**
      * List of Urls Crawled
      */
-    private HashSet<String> visited;
+    private HashSet<String> visited = new HashSet<>();
     /**
      *  A list of Key Value pairs of entries
      */
-    private ArrayList<Map.Entry<String, String>> graph;
+    private ArrayList<Map.Entry<String, String>> graph = new ArrayList<>();
     /**
      * Hash map of Dest > list of pages that link to it
      */
-    private HashMap<String, ArrayList<String>> links;
+    private HashMap<String, ArrayList<String>> links = new HashMap<>();
 
     /**
      * Create a Wiki Crawler
@@ -77,74 +73,87 @@ public class WikiCrawler {
         this.seedUrl = seedUrl;
         this.max = max;
         this.fileName = fileName;
-        requestCount = 0;
-        graph = new ArrayList<>();
-        q = new ArrayDeque<>();
-        visited = new HashSet<>();
         this.topics = topics;
-        links = new HashMap<>();
     }
 
     /**
      * Crawls the BASE_URL based on seedUrl and BASE_URL
      */
-    public void crawl() throws IOException, InterruptedException {
-        // Add the seed url to the
+    public void crawl() {
+        Queue<String> q = new LinkedList<>();
+
+        // Add the seed url to the queue
         q.add(seedUrl);
         visited.add(seedUrl);
         while (!q.isEmpty() && pagesCount < max) {
             // Remove from the top of the queue
             String currentPath = q.remove();
-            // Get page HTML
-            String html = getPageText(currentPath);
-            // Get the actual page content
-            int pTag = html.indexOf("<p>");
-            String parseString = html.substring(pTag + 3);
+            String html;
+            try {
+                // Get page HTML
+                html = getPageText(currentPath);
+            } catch (InterruptedException | IOException e) {
+                System.err.println("Problem downloading URL: " + currentPath);
+                e.printStackTrace();
+                return;
+            }
+            // Get the actual page content after the first plain <p> tag
+            String parseString = html.substring(html.indexOf("<p>") + 3).toLowerCase();
+
             // Checking if page contains all the topics
-            if (topics != null && topics.size() > 0) {
-                boolean keepGoing = true;
-                for (String s : topics) {
-                    // Doesn't contain one of the topics exit
-                    // TODO run .toLowerCase outside the loop once
-                    if (!parseString.toLowerCase().contains(s.toLowerCase())) {
-                        keepGoing = false;
-                        break;
+            boolean hasAllTopics = true;
+            for (String s : topics) {
+                // Doesn't contain one of the topics exit
+                if (!parseString.contains(s.toLowerCase())) {
+                    hasAllTopics = false;
+                    break;
+                }
+            }
+
+            // If the page does not have all the topics, do not process it further
+            if (hasAllTopics) {
+                // Add the pages that linked to me to the graph
+                ArrayList<String> pagesLinkedToMe = links.get(currentPath);
+                if (pagesLinkedToMe != null) {
+                    for (String page : pagesLinkedToMe) {
+                        graph.add(new AbstractMap.SimpleEntry<>(page, currentPath));
                     }
                 }
-                // The real abort if the page doesn't contain things
-                if (!keepGoing) {
-                    continue;
+
+                // Enqueue all links on the page
+                ArrayList<String> linksHTML = getLinks(html);
+                for (String link : linksHTML) {
+                    // If the URL is not visited, add it to the queue
+                    if (!visited.contains(link)) {
+                        q.add(link);
+                        visited.add(link);
+                        appendToLinksList(currentPath, link);
+                    }
                 }
+                pagesCount++;
             }
-            // Add the pages that linked to me to the graph
-            ArrayList<String> pagesLinkedToMe = links.get(currentPath);
-            if (pagesLinkedToMe != null) {
-                for (String page : pagesLinkedToMe) {
-                    graph.add(new AbstractMap.SimpleEntry<>(page, currentPath));
-                }
-            }
-            // Contains all the topics, get all links on the page
-            ArrayList<String> linksHTML = getLinks(html);
-            for (String link : linksHTML) {
-                // If the URL is not visited, add it to the queue
-                if (!visited.contains(link)) {
-                    q.add(link);
-                    visited.add(link);
-                    appendToKey(currentPath, link);
-                }
-            }
-            pagesCount++;
         }
         writeGraph();
     }
 
-    private void writeGraph() throws IOException {
-        FileWriter fw = new FileWriter(fileName);
-        for (Map.Entry entry : graph) {
-            fw.write(entry.getKey() + " " + entry.getValue() + "\n");
+    /**
+     * Writes the graph to the filesystem. The first line is the number of vertices. The rest of the lines are directed
+     * edges.
+     */
+    private void writeGraph() {
+        try (FileWriter fw = new FileWriter(fileName)) {
+            // Write the first line of the vertex count
+            fw.write(Integer.toString(pagesCount) + "\n");
+
+            // Write each edge
+            for (Map.Entry entry : graph) {
+                fw.write(entry.getKey() + " " + entry.getValue() + "\n");
+            }
+            fw.flush();
+        } catch (IOException e) {
+            System.err.println("Problem writing the graph to the filesystem.");
+            e.printStackTrace();
         }
-        fw.flush();
-        fw.close();
     }
 
     /**
@@ -167,10 +176,11 @@ public class WikiCrawler {
         // Build page string
         StringBuilder stringBuilder = new StringBuilder();
 
+        // Read all lines
         String line;
-
         while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
+            stringBuilder.append('\n');
         }
         // Add one to the page count
         requestCount++;
@@ -218,7 +228,7 @@ public class WikiCrawler {
      * @param source source page
      * @param dest dest page
      */
-    private void appendToKey(String source, String dest) {
+    private void appendToLinksList(String source, String dest) {
         links.computeIfAbsent(dest, k -> new ArrayList<>());
         links.get(dest).add(source);
     }
