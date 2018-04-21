@@ -24,6 +24,8 @@ We used an \texttt{ArrayDeque<String>} for $Q$. We needed a simple queue that le
 We used a \texttt{HashMap<String, List<String>>} for $visited$. The operations we need are inserting new URLs, checking for the existence of URLs as keys, and iterating through all keys with their values. The \texttt{HashMap} gives us $O(1)$ time complexity for those operations (assuming hash functions of $O(1)$). The \texttt{HashMap} implements what we need and does the operations quickly.
 
 In \texttt{NetworkInfluence}, we used a \texttt{HashMap<String, String>} to serve a dual purpose. First, the key served the same purpose as the \texttt{HashSet<String> visited} above. Second, this map stored the "backlink" to allow locating the path used to traverse the graph. The \texttt{HashMap} works quite well, because the important operations (contains key and get value by key) are all $O(1)$.
+\section{Number of edges and vertices}
+Edges: 1,147; Nodes: 100
 \section{Top 10 most influential nodes}
 \subsection{computed by mostInfluentialDegree}
 \begin{itemize}
@@ -84,50 +86,39 @@ function NetworkInfluence(file)
 function outDegree(v)
     if edges.containKey(v)
         return edges.get(v).size()
-	return 0
+    return 0
 \end{verbatim}
 \subsection{\texttt{shortestPath}}
 \begin{verbatim}
 function shortestPath(u, v)
-   	Queue toVisit
-   	HashMap<String, String> parent
+    Queue toVisit
+    HashMap<String, String> parent
 
-   	toVisit.add(u)
-   	parent.put(u, null)
-   	do
-   	    currentNode = toVisit.remove()
-   	    if currentNode == v
-   	        backNode = currentNode
-   	        List path
-   	        do
-   	            path.addFront(backNode)
-   	            backNode = parent.get(backend)
-   	        while !backNode == u
-   	        return path
-   	    foreach child in edges.get(currentNode)
-   	        if !parent.containsKey(child)
-   	            // Store the backlink
-   	            parent.put(child, currentNode)
-   	            toVisit.add(child)
-   	while !toVisit.empty()
-   	// No path
-   	return {}
+    toVisit.add(u)
+    parent.put(u, null)
+    do
+        currentNode = toVisit.remove()
+        if currentNode == v
+            backNode = currentNode
+            List path
+            do
+                path.addFront(backNode)
+                backNode = parent.get(backend)
+            while !backNode == u
+            return path
+        foreach child in edges.get(currentNode)
+            if !parent.containsKey(child)
+                // Store the backlink
+                parent.put(child, currentNode)
+                toVisit.add(child)
+    while !toVisit.empty()
+    // No path
+    return {}
 \end{verbatim}
 \subsection{\texttt{distance(String u, String v)}}
 \begin{verbatim}
 function distance(String u, String v) 
-   	return shortestPath(u,v).size() - 1
-\end{verbatim}
-\subsection{\texttt{influence(String u) }}
-\begin{verbatim}
-function influence(String u)
-    HashMap<Integer, Integer> tieredCounts = tieredBfs(u);
-    sum = 0
-
-	for depthAndCount in tieredCounts
-		sum += 1 / 2^depthAndCount.key * depthAndCount.value
-
-	return sum
+    return shortestPath(u,v).size() - 1
 \end{verbatim}
 \subsection{\texttt{distance(ArrayList<String> s, String v)}}
 \begin{verbatim}
@@ -147,10 +138,10 @@ function influence(s)
     HashMap<Integer, Integer> tieredCounts = tieredBfs(s);
     sum = 0
 
-	for depthAndCount in tieredCounts
-		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+    for depthAndCount in tieredCounts
+        sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-	return sum
+    return sum
 \end{verbatim}
 \subsection{\texttt{influence(ArrayList<String> s)}}
 \begin{verbatim}
@@ -158,46 +149,46 @@ function influence(ArrayList<String> s)
     HashMap<Integer, Integer> tieredCounts = tieredBfs(s);
     sum = 0
 
-	for depthAndCount in tieredCounts
-		sum += 1 / 2^depthAndCount.key * depthAndCount.value
+    for depthAndCount in tieredCounts
+        sum += 1 / 2^depthAndCount.key * depthAndCount.value
 
-	return sum
+    return sum
 \end{verbatim}
 \subsection{\texttt{mostInfluentialDegree(int k)}}
 \begin{verbatim}
 function mostInfluentialDegree(int k)
-     TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
-     
-      ArrayList<String> ret = new ArrayList<>(k);
-      
-      for node in nodes
-          topK.add(new Map.Entry(node, outDegree(node))
-          
-          while topK.size > k
-          	topK.remove(topK.first)
-       
-       for nodeAndInfluence in topK
-           ret.add(nodeAndInfluence.key)
-       
-       return ret
+    TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
+    
+    ArrayList<String> ret = new ArrayList<>(k);
+    
+    for node in nodes
+        topK.add(new Map.Entry(node, outDegree(node))
+        
+        while topK.size > k
+            topK.remove(topK.first)
+    
+    for nodeAndInfluence in topK
+        ret.add(nodeAndInfluence.key)
+    
+    return ret
 \end{verbatim}
 \subsection{\texttt{mostInfluentialModular(int k)}}
 \begin{verbatim}
 function mostInfluentialModular(int k)
-     TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
-     
-      ArrayList<String> ret = new ArrayList<>(k);
-      
-      for node in nodes
-          topK.add(new Map.Entry(node, influence(node))
-          
-          while topK.size > k
-          	topK.remove(topK.first)
-       
-       for nodeAndInfluence in topK
-           ret.add(nodeAndInfluence.key)
-       
-       return ret
+    TreeSet<Map.Entry<String, Integer>> topK = new TreeSet<>(new NodeInfluenceComparator<>());
+    
+    ArrayList<String> ret = new ArrayList<>(k);
+    
+    for node in nodes
+        topK.add(new Map.Entry(node, influence(node))
+        
+        while topK.size > k
+            topK.remove(topK.first)
+    
+    for nodeAndInfluence in topK
+        ret.add(nodeAndInfluence.key)
+    
+    return ret
 \end{verbatim}
 \subsection{\texttt{mostInfluentialSubModular(int k)}}
 \begin{verbatim}
