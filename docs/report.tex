@@ -4,6 +4,13 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
 \author{Matthew Burket and Joel May}
 \title{Programming Assignment 2 Report}
 
@@ -114,8 +121,8 @@ function distance(String u, String v)
 \subsection{\texttt{influence(String u) }}
 \begin{verbatim}
 function influence(String u)
-	TreeMap<Integer, Integer> tieredCounts = tieredBfs(u);
-	sum = 0
+    HashMap<Integer, Integer> tieredCounts = tieredBfs(u);
+    sum = 0
 
 	for depthAndCount in tieredCounts
 		sum += 1 / 2^depthAndCount.key * depthAndCount.value
@@ -137,8 +144,8 @@ function distance(ArrayList<String> s, String v)
 \subsection{\texttt{influence(String s)}}
 \begin{verbatim}
 function influence(s)
-	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
-	sum = 0
+    HashMap<Integer, Integer> tieredCounts = tieredBfs(s);
+    sum = 0
 
 	for depthAndCount in tieredCounts
 		sum += 1 / 2^depthAndCount.key * depthAndCount.value
@@ -148,8 +155,8 @@ function influence(s)
 \subsection{\texttt{influence(ArrayList<String> s)}}
 \begin{verbatim}
 function influence(ArrayList<String> s)
-	TreeMap<Integer, Integer> tieredCounts = tieredBfs(s);
-	sum = 0
+    HashMap<Integer, Integer> tieredCounts = tieredBfs(s);
+    sum = 0
 
 	for depthAndCount in tieredCounts
 		sum += 1 / 2^depthAndCount.key * depthAndCount.value
@@ -230,7 +237,7 @@ This method is private, however it is used two places in public methods. Thus,
 it is placed here for brevity in the public methods.
 \begin{verbatim}
 function tieredBfs(Iterable<String> startingNodes)
-    TreeMap<Int, Int> ret = new TreeMap<>();
+    HashMap<Int, Int> ret = new TreeMap<>();
     ArrayDeque<Map.Entry<String, Integer>> toVisit = new ArrayDeque<>()
     HashSet<String> visited = new HashSet<>()
 
